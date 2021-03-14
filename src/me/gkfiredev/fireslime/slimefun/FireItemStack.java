@@ -3,6 +3,7 @@ package me.gkfiredev.fireslime.slimefun;
 import org.bukkit.Material;
 
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
+import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
 public class FireItemStack {
@@ -12,5 +13,6 @@ public class FireItemStack {
 	
 	public static final SlimefunItemStack LUCK_STONE = new SlimefunItemStack("LUCK_STONE", HeadTexture.SAPPHIRE, "&bLuck Stone");
 	
+	public static final SlimefunItemStack MOB_DEX = new SlimefunItemStack("MOB_DEX", Material.BOOK, "&cMob &fDex", LoreBuilder.powerCharged(0, 10));
 	
 }

@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.gkfiredev.fireslime.tools.MobDex;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 
@@ -14,5 +15,5 @@ public class FireRegistry {
 	
 	
 	public static SlimefunItem LUCKSTONE = new SlimefunItem(FireCategories.SDMC, FireItemStack.LUCK_STONE, RecipeType.ANCIENT_ALTAR, new ItemStack[] {SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.MAGIC_LUMP_2, SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.MAGIC_LUMP_2, new ItemStack(Material.DIAMOND), SlimefunItems.MAGIC_LUMP_2, SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.MAGIC_LUMP_2, SlimefunItems.SYNTHETIC_SAPPHIRE});
-	
+	public static MobDex MOB_DEX = new MobDex(FireCategories.FIRESLIME, FireItemStack.MOB_DEX, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {SlimefunItems.ELECTRO_MAGNET, SlimefunItems.HOLOGRAM_PROJECTOR, SlimefunItems.ELECTRO_MAGNET, SlimefunItems.BRASS_INGOT, SlimefunItems.ANDROID_MEMORY_CORE, SlimefunItems.BRASS_INGOT, SlimefunItems.BRASS_INGOT, SlimefunItems.SMALL_CAPACITOR, SlimefunItems.BRASS_INGOT});
 }

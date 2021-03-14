@@ -2,7 +2,7 @@ name: FireSlime
 author: GKFire
 api-version: 1.16
 version: ${project.version}
-description: GKFire's Addon for Slimefun
+website: https://github.com/GKFire/FireSlime
 main: me.gkfiredev.fireslime.FireSlime
 
 
