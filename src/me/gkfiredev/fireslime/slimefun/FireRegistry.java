@@ -1,9 +1,12 @@
 package me.gkfiredev.fireslime.slimefun;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.gkfiredev.fireslime.tools.FiniteGauntlet;
+import me.gkfiredev.fireslime.tools.FiniteRock;
 import me.gkfiredev.fireslime.tools.MobDex;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -16,4 +19,16 @@ public class FireRegistry {
 	
 	public static SlimefunItem LUCKSTONE = new SlimefunItem(FireCategories.SDMC, FireItemStack.LUCK_STONE, RecipeType.ANCIENT_ALTAR, new ItemStack[] {SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.MAGIC_LUMP_2, SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.MAGIC_LUMP_2, new ItemStack(Material.DIAMOND), SlimefunItems.MAGIC_LUMP_2, SlimefunItems.SYNTHETIC_SAPPHIRE, SlimefunItems.MAGIC_LUMP_2, SlimefunItems.SYNTHETIC_SAPPHIRE});
 	public static MobDex MOB_DEX = new MobDex(FireCategories.FIRESLIME, FireItemStack.MOB_DEX, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {SlimefunItems.ELECTRO_MAGNET, SlimefunItems.HOLOGRAM_PROJECTOR, SlimefunItems.ELECTRO_MAGNET, SlimefunItems.BRASS_INGOT, SlimefunItems.ANDROID_MEMORY_CORE, SlimefunItems.BRASS_INGOT, SlimefunItems.BRASS_INGOT, SlimefunItems.SMALL_CAPACITOR, SlimefunItems.BRASS_INGOT});
+	
+	
+	//Finite Rocks
+	public static FiniteRock REALITY_ROCK = new FiniteRock(FireCategories.FIRESLIME, FireItemStack.REALITY_ROCK, RecipeType.ANCIENT_ALTAR, FiniteRock.getRecipe(0), ChatColor.RED);
+	public static FiniteRock SPACE_ROCK = new FiniteRock(FireCategories.FIRESLIME, FireItemStack.SPACE_ROCK, RecipeType.ANCIENT_ALTAR, FiniteRock.getRecipe(2), ChatColor.BLUE);
+	public static FiniteRock POWER_ROCK = new FiniteRock(FireCategories.FIRESLIME, FireItemStack.POWER_ROCK, RecipeType.ANCIENT_ALTAR, FiniteRock.getRecipe(1), ChatColor.DARK_PURPLE);
+	public static FiniteRock TIME_ROCK = new FiniteRock(FireCategories.FIRESLIME, FireItemStack.TIME_ROCK, RecipeType.ANCIENT_ALTAR, FiniteRock.getRecipe(3), ChatColor.GREEN);
+	public static FiniteRock MIND_ROCK = new FiniteRock(FireCategories.FIRESLIME, FireItemStack.MIND_ROCK, RecipeType.ANCIENT_ALTAR, FiniteRock.getRecipe(5), ChatColor.YELLOW);
+	public static FiniteRock SOUL_ROCK = new FiniteRock(FireCategories.FIRESLIME, FireItemStack.SOUL_ROCK, RecipeType.ANCIENT_ALTAR, FiniteRock.getRecipe(4), ChatColor.YELLOW);
+	
+	public static FiniteGauntlet FINITE_GAUNTLET = new FiniteGauntlet(FireCategories.FIRESLIME, FireItemStack.FINITE_GAUNTLET, RecipeType.ANCIENT_ALTAR, new ItemStack[] {FireItemStack.REALITY_ROCK, FireItemStack.POWER_ROCK, FireItemStack.SPACE_ROCK, FireItemStack.TIME_ROCK, FireItemStack.MIND_ROCK, FireItemStack.SOUL_ROCK, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT, SlimefunItems.REINFORCED_ALLOY_INGOT});
+	
 }
