@@ -1,6 +1,10 @@
 package me.gkfiredev.fireslime.slimefun;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.thebusybiscuit.slimefun4.utils.HeadTexture;
 import io.github.thebusybiscuit.slimefun4.utils.LoreBuilder;
@@ -27,4 +31,36 @@ public class FireItemStack {
 	public static final SlimefunItemStack MIND_ROCK = new SlimefunItemStack("MIND_ROCK", FireSlimeHeads.MIND_ROCK, "&eMind Rock", "", "&7A Rock with the ability to control any player");
 	public static final SlimefunItemStack SOUL_ROCK = new SlimefunItemStack("SOUL_ROCK", FireSlimeHeads.SOUL_ROCK, "&6Soul Rock", "", "&7A Rock that can bring back players from the dead");
 	
+	
+	//Zelda
+	public static ItemStack Hylian_Shield_ItemStack() {
+		ItemStack shield = new ItemStack(Material.SHIELD);
+		ItemMeta meta = shield.getItemMeta();
+//		BlockStateMeta meta = (BlockStateMeta) shield.getItemMeta();
+//		BlockState state = meta.getBlockState();
+//		Banner banner = (Banner) state;
+//		banner.setBaseColor(DyeColor.BLUE);
+//		List<Pattern> patterns = new ArrayList<>();
+//		patterns.add(new Pattern(DyeColor.RED, PatternType.FLOWER));
+//		patterns.add(new Pattern(DyeColor.BLUE, PatternType.HALF_HORIZONTAL));
+//		patterns.add(new Pattern(DyeColor.YELLOW, PatternType.TRIANGLE_TOP));
+//		patterns.add(new Pattern(DyeColor.BLUE, PatternType.STRIPE_TOP));
+//		patterns.add(new Pattern(DyeColor.WHITE, PatternType.CURLY_BORDER));
+//		patterns.add(new Pattern(DyeColor.WHITE, PatternType.TRIANGLES_TOP));
+//		banner.setPatterns(patterns);
+//		meta.setBlockState(state);
+		meta.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
+		shield.setItemMeta(meta);
+		shield.addUnsafeEnchantment(Enchantment.DURABILITY, 6);
+		return shield;
+	}
+	
+	public static ItemStack Master_Sword_ItemStack() {
+		ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
+		sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 8);
+		sword.addUnsafeEnchantment(Enchantment.DURABILITY, 6);
+		return sword;
+	}
+	public static final SlimefunItemStack HYLIAN_SHIELD = new SlimefunItemStack("HYLIAN_SHIELD", Hylian_Shield_ItemStack(), "&bHylian Shield", "");
+	public static final SlimefunItemStack MASTER_SWORD = new SlimefunItemStack("MASTER_SWORD", Master_Sword_ItemStack(), "&bMaster Sword", "");
 }

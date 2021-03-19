@@ -54,6 +54,9 @@ public class FireSlime extends JavaPlugin implements SlimefunAddon {
 	
 	public void registerSDMCItems() {
 		FireRegistry.LUCKSTONE.register(this);
+		FireRegistry.HYLIAN_SHIELD.register(this);
+		FireRegistry.MASTER_SWORD.register(this);
+		
 	}
 
 }

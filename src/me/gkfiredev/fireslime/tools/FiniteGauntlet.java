@@ -62,6 +62,9 @@ public class FiniteGauntlet extends SlimefunItem {
 			p.sendMessage(ChatColor.translateAlternateColorCodes('&', SlimefunPlugin.getCfg().getString("options.chat-prefix") + "&cThere is no one else on the server! Why would you waste the power of the Finite Gauntlet?"));
 			return null;
 		}
+		if(item.getAmount() > 1) {
+			p.sendMessage(ChatColors.color(SlimefunPlugin.getCfg().getString("options.chat-prefix") + "&cYou cannot use the Gauntlet in a stack!"));
+		}
 		useGauntlet(p, item);
 		return null;
 	}
@@ -83,13 +86,23 @@ public class FiniteGauntlet extends SlimefunItem {
 			p.playSound(p.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 			item.setAmount(0);
 		}
+		
+		usesLeft--;
+		meta.getPersistentDataContainer().set(usageKey, PersistentDataType.INTEGER, usesLeft);
+
+		List<String> lore = meta.getLore();
+		lore.set(5, ChatColors.color("&7Uses Left: &e" + usesLeft));
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+
 		for(Player target : Bukkit.getOnlinePlayers()) target.playSound(p.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 2, 1);
 		Bukkit.broadcastMessage(ChatColors.color(SlimefunPlugin.getCfg().getString("options.chat-prefix") + ChatColor.GOLD + p.getName() + ChatColor.LIGHT_PURPLE + " snapped their fingers!"));
 		List<Player> DustPlayers = new ArrayList<Player>();
 		List<Player> players = new ArrayList<Player>();
-		for(Player target : Bukkit.getOnlinePlayers()) { players.add(target); }
+		for(Player target : Bukkit.getOnlinePlayers()) { if(target.getGameMode() != GameMode.SPECTATOR) { players.add(target); } }
 		players.remove(p);
-		for(int i = 0; i <= Math.round((players.size() / 2)); i++) {
+		int amountToKick = (int) Math.ceil((players.size() / 2.0));
+		for(int i = 0; i < amountToKick; i++) {
 			int ran = new Random().nextInt(players.size());
 			DustPlayers.add(players.get(ran));
 			players.get(ran).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (delay+2)*20, 1));
@@ -105,15 +118,6 @@ public class FiniteGauntlet extends SlimefunItem {
 
 			}
 		}, delay*20);
-
-		usesLeft--;
-		meta.getPersistentDataContainer().set(usageKey, PersistentDataType.INTEGER, usesLeft);
-
-		List<String> lore = meta.getLore();
-		lore.set(5, ChatColors.color("&7Uses Left: &e" + usesLeft));
-		meta.setLore(lore);
-		item.setItemMeta(meta);
-
 	}
 	
 	
