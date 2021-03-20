@@ -64,6 +64,7 @@ public class FiniteGauntlet extends SlimefunItem {
 		}
 		if(item.getAmount() > 1) {
 			p.sendMessage(ChatColors.color(SlimefunPlugin.getCfg().getString("options.chat-prefix") + "&cYou cannot use the Gauntlet in a stack!"));
+			return null;
 		}
 		useGauntlet(p, item);
 		return null;
@@ -100,8 +101,8 @@ public class FiniteGauntlet extends SlimefunItem {
 		List<Player> DustPlayers = new ArrayList<Player>();
 		List<Player> players = new ArrayList<Player>();
 		for(Player target : Bukkit.getOnlinePlayers()) { if(target.getGameMode() != GameMode.SPECTATOR) { players.add(target); } }
-		players.remove(p);
 		int amountToKick = (int) Math.ceil((players.size() / 2.0));
+		players.remove(p);
 		for(int i = 0; i < amountToKick; i++) {
 			int ran = new Random().nextInt(players.size());
 			DustPlayers.add(players.get(ran));
