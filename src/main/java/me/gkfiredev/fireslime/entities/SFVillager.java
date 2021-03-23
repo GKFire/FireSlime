@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.event.EventHandler;
@@ -12,10 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.entity.VillagerCareerChangeEvent;
 import org.bukkit.event.entity.VillagerCareerChangeEvent.ChangeReason;
-import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 
 import io.github.thebusybiscuit.slimefun4.core.categories.SeasonalCategory;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -38,13 +39,15 @@ public class SFVillager implements Listener {
 			if(event.getProfession().equals(Profession.TOOLSMITH)) {
 				int chance = new Random().nextInt(100) + 1;
 				if(chance <= FireSlime.getCfg().getInt("options.slimefunVillagerChance")) {
-					vil.setMetadata(KEY, new FixedMetadataValue(FireSlime.getPlugin(), 1));
+					vil.getPersistentDataContainer().set(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.INTEGER, 1);
+					// vil.setMetadata(KEY, new FixedMetadataValue(FireSlime.getPlugin(), 1));
 					List<MerchantRecipe> trades = getRandomTrades(vil.getRecipeCount(), ((vil.getVillagerLevel() * 5) + 1));
 					vil.setRecipes(trades);
 				}
 			} else if(event.getProfession().equals(Profession.NONE)) {
-				if(vil.hasMetadata(KEY)) {
-					vil.removeMetadata(KEY, FireSlime.getPlugin());
+				if(vil.getPersistentDataContainer().has(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.INTEGER)) {
+					vil.getPersistentDataContainer().remove(new NamespacedKey(FireSlime.getPlugin(), KEY));
+					// vil.removeMetadata(KEY, FireSlime.getPlugin());
 				}
 			}
 		}
@@ -53,7 +56,7 @@ public class SFVillager implements Listener {
 	@EventHandler
 	public void sfVillagerAcquireTrade(VillagerAcquireTradeEvent ev) {
 		Villager vil = (Villager) ev.getEntity();
-		if(vil.hasMetadata(KEY)) {
+		if(vil.getPersistentDataContainer().has(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.INTEGER)) {
 			MerchantRecipe trade = getRandomTrade((vil.getVillagerLevel() * 5) + 1);
 			ev.setRecipe(trade);
 			
@@ -84,6 +87,23 @@ public class SFVillager implements Listener {
 		Category category = categories.get(new Random().nextInt(categories.size()));
 		SlimefunItem sfItem = category.getItems().get(new Random().nextInt(category.getItems().size()));
 		ItemStack item = new ItemStack(sfItem.getItem());
+		boolean isFood = false;
+		
+		if(sfItem.getItem().hasItemMeta()) {
+			if(sfItem.getItem().getItemMeta().hasLore()) {
+				List<String> lore = sfItem.getItem().getItemMeta().getLore();
+				for(String s : lore) {
+					if(s.contains("hunger")) {
+						isFood = true;
+						break;
+					}
+				}
+			}
+		}
+		if(isFood && !sfItem.getItem().getType().equals(Material.POTION)) {
+			item.setAmount(new Random().nextInt(3) + 1);
+		}
+		
 		if(sfItem.getItemName().toLowerCase().contains("dust")) {
 			item.setAmount(new Random().nextInt(5) + 1);
 		}
@@ -92,6 +112,9 @@ public class SFVillager implements Listener {
 		if(cheap) {
 			if(sfItem.getItemName().toLowerCase().contains("dust")) {
 				payment.add(new ItemStack(Material.EMERALD));
+				trade.setIngredients(payment);
+			} else if(isFood) {
+				payment.add(new ItemStack(Material.EMERALD, (new Random().nextInt(6) + 1)));
 				trade.setIngredients(payment);
 			} else {
 				payment.add(new ItemStack(Material.EMERALD, (new Random().nextInt(16) + 1)));
@@ -117,11 +140,19 @@ public class SFVillager implements Listener {
 				continue;
 			}
 			String name = ChatColor.stripColor(category.getUnlocalizedName()).toLowerCase();
-			if(name.contains("weapons") || name.contains("tools") || name.contains("useful items") || name.contains("food") || name.contains("armor") || name.contains("resources") || name.contains("magical items") || name.contains("drinks") || name.contains("tools") || name.contains("gear") || name.contains("strorage") || name.contains("talismans")) {
+			if(name.contains("weapons") || name.contains("tools") || name.contains("useful items") || name.contains("food") || name.contains("armor") || name.contains("resources") || name.contains("magical items") || name.contains("drinks") || name.contains("tools") || name.contains("gear") || name.contains("strorage") || name.contains("talismans") || name.contains("garden")) {
 				cheapSelection.add(category);
 			} else if(name.contains("energy") || name.contains("machines") || name.contains("gadgets")) {
 				selection.add(category);
 			}
+		}
+		Bukkit.broadcastMessage("------ Selected Categories [cheap] -------");
+		for(Category category : cheapSelection) {
+			Bukkit.broadcastMessage(category.getUnlocalizedName());
+		}
+		Bukkit.broadcastMessage("------ Selected Categories [expencive] -------");
+		for(Category category : selection) {
+			Bukkit.broadcastMessage(category.getUnlocalizedName());
 		}
 	}
 	
