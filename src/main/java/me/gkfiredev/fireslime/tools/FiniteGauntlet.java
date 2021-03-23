@@ -78,6 +78,7 @@ public class FiniteGauntlet extends SlimefunItem {
 			
 			if(!event.isCancelled()) {
 				p.setHealth(event.getDamage());
+				p.updateInventory();
 			}
 		}
 

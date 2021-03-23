@@ -63,4 +63,6 @@ public class FireItemStack {
 	}
 	public static final SlimefunItemStack HYLIAN_SHIELD = new SlimefunItemStack("HYLIAN_SHIELD", Hylian_Shield_ItemStack(), "&bHylian Shield", "");
 	public static final SlimefunItemStack MASTER_SWORD = new SlimefunItemStack("MASTER_SWORD", Master_Sword_ItemStack(), "&bMaster Sword", "");
+	
+	public static final SlimefunItemStack DECOMPILER = new SlimefunItemStack("DECOMPILER", Material.CRAFTING_TABLE, "&6Decompiler", "", "&7 Reverses the process that is crafting.", "&7 Only works with Vanilla Items");
 }

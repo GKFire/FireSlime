@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.gkfiredev.fireslime.machines.Decompiler;
 import me.gkfiredev.fireslime.tools.FiniteGauntlet;
 import me.gkfiredev.fireslime.tools.FiniteRock;
 import me.gkfiredev.fireslime.tools.MobDex;
@@ -35,4 +36,9 @@ public class FireRegistry {
 	//Zelda
 	public static SlimefunItem HYLIAN_SHIELD = new SlimefunItem(FireCategories.FIRESLIME, FireItemStack.HYLIAN_SHIELD, RecipeType.ARMOR_FORGE, new ItemStack[] {SlimefunItems.STEEL_INGOT, SlimefunItems.SYNTHETIC_DIAMOND, SlimefunItems.STEEL_INGOT, SlimefunItems.STEEL_INGOT, SlimefunItems.STEEL_INGOT, SlimefunItems.STEEL_INGOT, null, SlimefunItems.STEEL_INGOT, null});
 	public static SlimefunItem MASTER_SWORD = new SlimefunItem(FireCategories.FIRESLIME, FireItemStack.MASTER_SWORD, RecipeType.MAGIC_WORKBENCH, new ItemStack[] {SlimefunItems.MAGIC_LUMP_3, SlimefunItems.CARBONADO, SlimefunItems.MAGIC_LUMP_3, new ItemStack(Material.OBSIDIAN), SlimefunItems.CARBONADO, new ItemStack(Material.OBSIDIAN), SlimefunItems.MAGIC_LUMP_3, FireItemStack.MAGIC_ROD_II, SlimefunItems.MAGIC_LUMP_3});
+	
+	
+	//Machines
+	@SuppressWarnings("deprecation")
+	public static Decompiler DECOMPILER = new Decompiler(FireCategories.FIREMACHINES, FireItemStack.DECOMPILER, RecipeType.ENHANCED_CRAFTING_TABLE, new ItemStack[] {SlimefunItems.DAMASCUS_STEEL_INGOT, SlimefunItems.AUTOMATED_CRAFTING_CHAMBER, SlimefunItems.DAMASCUS_STEEL_INGOT, SlimefunItems.ALUMINUM_BRONZE_INGOT, SlimefunItems.CARGO_MOTOR, SlimefunItems.ALUMINUM_BRONZE_INGOT, SlimefunItems.DAMASCUS_STEEL_INGOT, SlimefunItems.BIG_CAPACITOR, SlimefunItems.DAMASCUS_STEEL_INGOT});
 }
