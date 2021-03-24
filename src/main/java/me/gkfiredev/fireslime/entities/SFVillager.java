@@ -21,6 +21,7 @@ import org.bukkit.persistence.PersistentDataType;
 import io.github.thebusybiscuit.slimefun4.core.categories.SeasonalCategory;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.gkfiredev.fireslime.FireSlime;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import net.md_5.bungee.api.ChatColor;
@@ -39,13 +40,14 @@ public class SFVillager implements Listener {
 			if(event.getProfession().equals(Profession.TOOLSMITH)) {
 				int chance = new Random().nextInt(100) + 1;
 				if(chance <= FireSlime.getCfg().getInt("options.slimefunVillagerChance")) {
-					vil.getPersistentDataContainer().set(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.INTEGER, 1);
+					Category category = getRandomCategory();
+					vil.getPersistentDataContainer().set(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.STRING, getIDName(category));
 					// vil.setMetadata(KEY, new FixedMetadataValue(FireSlime.getPlugin(), 1));
-					List<MerchantRecipe> trades = getRandomTrades(vil.getRecipeCount(), ((vil.getVillagerLevel() * 5) + 1));
+					List<MerchantRecipe> trades = getRandomTrades(getIDName(category), vil.getRecipeCount(), ((vil.getVillagerLevel() * 5) + 1));
 					vil.setRecipes(trades);
 				}
 			} else if(event.getProfession().equals(Profession.NONE)) {
-				if(vil.getPersistentDataContainer().has(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.INTEGER)) {
+				if(vil.getPersistentDataContainer().has(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.STRING)) {
 					vil.getPersistentDataContainer().remove(new NamespacedKey(FireSlime.getPlugin(), KEY));
 					// vil.removeMetadata(KEY, FireSlime.getPlugin());
 				}
@@ -56,36 +58,36 @@ public class SFVillager implements Listener {
 	@EventHandler
 	public void sfVillagerAcquireTrade(VillagerAcquireTradeEvent ev) {
 		Villager vil = (Villager) ev.getEntity();
-		if(vil.getPersistentDataContainer().has(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.INTEGER)) {
-			MerchantRecipe trade = getRandomTrade((vil.getVillagerLevel() * 5) + 1);
+		if(vil.getPersistentDataContainer().has(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.STRING)) {
+			String id = vil.getPersistentDataContainer().get(new NamespacedKey(FireSlime.getPlugin(), KEY), PersistentDataType.STRING);
+			MerchantRecipe trade = getRandomTrade(id, (vil.getVillagerLevel() * 5) + 1);
 			ev.setRecipe(trade);
 			
 		}
 	}
 	
-	private List<MerchantRecipe> getRandomTrades(int size, int xp) {
+	private List<MerchantRecipe> getRandomTrades(String id, int size, int xp) {
 		List<MerchantRecipe> recipes = new ArrayList<>();
 		for(int i = 0; i < size; i++) {
-			recipes.add(getRandomTrade(xp));
+			recipes.add(getRandomTrade(id, xp));
 		}
 		return recipes;
 	}
 	
-	private MerchantRecipe getRandomTrade(int xp) {
-		List<Category> categories;
-		boolean cheap = false;
+	private MerchantRecipe getRandomTrade(String id, int xp) {
+		Category category = getCategoryFromUnlocalizedName(id);
+		boolean cheap = isCheapCategory(category);
 		int maxUses;
-		if((new Random().nextInt(2) + 1) == 1) {
-			categories = new ArrayList<>(selection);
-			cheap = false;
-			maxUses = new Random().nextInt(8) + 1;
+		if(cheap) {
+			maxUses = new Random().nextInt(48) + 8;
 		} else {
-			categories = new ArrayList<>(cheapSelection);
-			cheap = true;
-			maxUses = new Random().nextInt(40) + 24;
+			maxUses = new Random().nextInt(8) + 1;		
 		}
-		Category category = categories.get(new Random().nextInt(categories.size()));
-		SlimefunItem sfItem = category.getItems().get(new Random().nextInt(category.getItems().size()));
+
+		SlimefunItem sfItem;
+		do {
+			sfItem = category.getItems().get(new Random().nextInt(category.getItems().size()));
+		} while (sfItem.getRecipeType().equals(RecipeType.MULTIBLOCK));
 		ItemStack item = new ItemStack(sfItem.getItem());
 		boolean isFood = false;
 		
@@ -130,6 +132,18 @@ public class SFVillager implements Listener {
 		
 	}
 	
+	public static Category getRandomCategory() {
+		int option = new Random().nextInt(2) + 1;
+		List<Category> categories;
+		if(option == 2) {
+			categories = new ArrayList<>(cheapSelection);
+		} else {
+			categories = new ArrayList<>(selection);
+		}
+		Category category = categories.get(new Random().nextInt(categories.size()));
+		return category;
+	}
+	
 	
 	public static void updateCategoryList() {
 		cheapSelection.clear();
@@ -140,7 +154,7 @@ public class SFVillager implements Listener {
 				continue;
 			}
 			String name = ChatColor.stripColor(category.getUnlocalizedName()).toLowerCase();
-			if(name.contains("weapons") || name.contains("tools") || name.contains("useful items") || name.contains("food") || name.contains("armor") || name.contains("resources") || name.contains("magical items") || name.contains("drinks") || name.contains("tools") || name.contains("gear") || name.contains("strorage") || name.contains("talismans") || name.contains("garden")) {
+			if(name.contains("useful items") || name.contains("food") || name.contains("resources") || name.contains("magical items") || name.contains("drinks") || name.contains("gear") || name.contains("storage") || name.contains("talismans") || name.contains("garden")) {
 				cheapSelection.add(category);
 			} else if(name.contains("energy") || name.contains("machines") || name.contains("gadgets")) {
 				selection.add(category);
@@ -148,12 +162,44 @@ public class SFVillager implements Listener {
 		}
 		Bukkit.broadcastMessage("------ Selected Categories [cheap] -------");
 		for(Category category : cheapSelection) {
-			Bukkit.broadcastMessage(category.getUnlocalizedName());
+			Bukkit.getLogger().info(category.getUnlocalizedName());
 		}
 		Bukkit.broadcastMessage("------ Selected Categories [expencive] -------");
 		for(Category category : selection) {
-			Bukkit.broadcastMessage(category.getUnlocalizedName());
+			Bukkit.getLogger().info(category.getUnlocalizedName());
 		}
+	}
+	
+	public static Category getCategoryFromUnlocalizedName(String unlocalizedName) {
+		for(Category category : cheapSelection) {
+			String name = getIDName(category);
+			if(name.equals(unlocalizedName)) {
+				return category;
+			}
+		}
+		for(Category category : selection) {
+			String name = getIDName(category);
+			if(name.equals(unlocalizedName)) {
+				return category;
+			}
+		}
+		return null;
+	}
+	public static String getIDName(Category category) {
+		String name = "";
+		name = ChatColor.stripColor(category.getUnlocalizedName());
+		name = name.toLowerCase();
+		name.replaceAll(" ", "_");
+		
+		return name;
+	}
+	
+	public static boolean isCheapCategory(Category category) {
+		for(Category cheap : cheapSelection) {
+			String cheapID = getIDName(cheap);
+			if(cheapID.equals(getIDName(category))) return true;
+		}
+		return false;
 	}
 	
 	
