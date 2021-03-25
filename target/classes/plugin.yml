@@ -1,9 +1,0 @@
-name: FireSlime
-author: GKFire
-api-version: 1.16
-version: RC-8
-website: https://github.com/GKFire/FireSlime
-main: me.gkfiredev.fireslime.FireSlime
-
-depend: [Slimefun]
-softdepend: [ExoticGarden, ExtraGear, PrivateStorage]
